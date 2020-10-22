@@ -10,6 +10,7 @@ import tools.savers.UserSaver;
 
 public class SecureManager {
 private Scanner scanner = new Scanner(System.in);
+public static enum role {READER,MANAGER};
     public User checkTask(User[] users, Reader[] readers) {
         // предоставить выбор пользователю: 
             //0. Выход из программы 
@@ -91,5 +92,6 @@ private Scanner scanner = new Scanner(System.in);
         return null;
         
     }
+    
    
 }
