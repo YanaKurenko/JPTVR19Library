@@ -13,6 +13,8 @@ import entity.Book;
 import entity.History;
 import entity.Reader;
 import entity.User;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import security.SecureManager;
 import tools.creators.BookManager;
@@ -23,9 +25,14 @@ import ui.ReaderUI;
 
 public class App {
     private Book[] books = new Book[10];
+    private List<Book> listBooks = new ArrayList<>();
     private Reader[] readers = new Reader[10];
+    private List<Reader> listReader = new ArrayList<>();
     private History[] histories = new History[10];
+    private List<History> listHistories = new ArrayList<>();
     private User[] users = new User[10];
+    private List<User> listUsers = new ArrayList<>();
+    
     private BookManager bookManager = new BookManager();
     private ReaderManager readerManager = new ReaderManager();
     private LibraryManager libraryManager = new LibraryManager();
@@ -38,8 +45,8 @@ public class App {
     public static User loginedUser;
     
     public App() {
-        books = bookSaver.loadBooks();
-        readers = readerSaver.loadReaders();
+        listBooks = bookSaver.loadBooks();
+        listReader = readerSaver.loadReaders();
         histories = historySaver.loadHistories();
         users = userSaver.loadUsers();
     }
@@ -50,10 +57,10 @@ public class App {
         this.loginedUser = secureManager.checkTask(users,readers);
         if("MANAGER".equals(this.loginedUser.getRole())){
             ManagerUI managerUI = new ManagerUI();
-            managerUI.getManagerUI(readers, users, books, histories);
+            managerUI.getManagerUI(readers, users, listBooks, histories);
         }else if("READER".equals(this.loginedUser.getRole())){
             ReaderUI readerUI = new ReaderUI();
-            readerUI.getReaderUI(readers, users, books, histories);
+            readerUI.getReaderUI(readers, users, listBooks, histories);
         }
     }
 }

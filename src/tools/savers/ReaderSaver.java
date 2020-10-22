@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -36,8 +38,9 @@ public class ReaderSaver {
         }
     }
 
-    public Reader[] loadReaders() {
+    public List<Reader> loadReaders() {
         Reader[] readers = new Reader[10];
+        List<Reader> listReaders = new ArrayList<>();
         FileInputStream fis = null;
         ObjectInputStream ois = null;
         try {
@@ -51,7 +54,7 @@ public class ReaderSaver {
         } catch (ClassNotFoundException ex) {
             System.out.println("Не найден класс");
         }
-        return readers;
+        return listReaders;
     }
 
     

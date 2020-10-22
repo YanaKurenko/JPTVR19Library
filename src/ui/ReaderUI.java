@@ -9,6 +9,7 @@ import entity.Book;
 import entity.History;
 import entity.Reader;
 import entity.User;
+import java.util.List;
 import java.util.Scanner;
 import security.SecureManager;
 import tools.creators.BookManager;
@@ -33,7 +34,7 @@ public class ReaderUI {
     private SecureManager secureManager = new SecureManager();
     private UserSaver userSaver = new UserSaver();
     
-    public void getReaderUI(Reader[] readers, User[] users, Book[] books, History[] histories){
+    public void getReaderUI(Reader[] readers, User[] users, List<Book> listBooks, History[] histories){
         boolean repeat = true;
         do{
             System.out.println("Задачи: ");
@@ -51,11 +52,11 @@ public class ReaderUI {
                     break;
                 case "1":
                     System.out.println("--- Список книг ---");
-                    bookManager.printListBooks(books);
+                    bookManager.printListBooks(listBooks);
                     break;
                 case "2":
                     System.out.println("--- Выдать книгу читателю ---");
-                    History history = libraryManager.takeOnBook(books, readers);
+                    History history = libraryManager.takeOnBook(listBooks, readers);
                     libraryManager.addHistoryToArray(history,histories);
                     historySaver.saveHistories(histories);
                     break;
