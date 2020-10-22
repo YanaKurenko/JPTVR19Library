@@ -60,9 +60,6 @@ private Scanner scanner = new Scanner(System.in);
         readerSaver.saveReaders(readers);
         UserSaver userSaver = new UserSaver();
         userSaver.saveUsers(users);
-        
-        
-    
     }
 
     private User checkInUser(User[] users) {
@@ -84,12 +81,12 @@ private Scanner scanner = new Scanner(System.in);
                     }
                     
                 }
-                System.out.println("У вас нет доступа(пароль введен не верно)");
+                System.out.println("Пароль введен неверно (у вас нет доступа)");
                 System.exit(0);
                 
             }
         }
-        System.out.println("У вас нет доступа. Зарегистрируйтесь!");
+        System.out.println("Такого пользователя не существует. Зарегистрируйтесь!");
         System.exit(0);
         return null;
         
