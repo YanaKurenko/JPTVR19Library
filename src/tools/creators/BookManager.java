@@ -32,15 +32,15 @@ public class BookManager {
         return book;
     }
 
-    public void addBookToArray(Book book, List<Book> listBooks) {
-        listBooks.add(book);
+    public void addBookToArray(Book book, List<Book> ListBooks) {
+        ListBooks.add(book);
 
     }
 
-    public void printListBooks(List<Book> listBooks) {
-        for (int i = 0; i < listBooks.size(); i++) {
-            if(listBooks.get(i) != null){
-                System.out.println(i+1+". " + listBooks.get(i).toString());
+    public void printListBooks(List<Book> ListBooks) {
+        for (int i = 0; i < ListBooks.size(); i++) {
+            if(ListBooks.get(i) != null){
+                System.out.println(i+1+". " + ListBooks.get(i).toString());
             }
         }   
     }

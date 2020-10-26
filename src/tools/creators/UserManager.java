@@ -8,6 +8,7 @@ package tools.creators;
 import entity.Book;
 import entity.Reader;
 import entity.User;
+import java.util.List;
 import java.util.Scanner;
 import security.SecureManager;
 
@@ -29,7 +30,7 @@ public class UserManager {
         user.setPassword(scanner.nextLine());
         int numRole;
         do {
-            System.out.print("Список ролей ");
+            System.out.println("Список ролей ");
             for (int i = 0; i < SecureManager.role.values().length; i++) {
                 System.out.printf("%d. %s%n"
                         ,i+1
@@ -42,7 +43,7 @@ public class UserManager {
                 numRole = Integer.parseInt(numRoleStr);
                 break;
             }catch (Exception e) {
-                System.out.println("Вводите указанные цыфры! ");
+                System.out.println("Вводите указанные цифры! ");
             }
         }while(true);
         user.setRole(SecureManager.role.values()[numRole - 1].toString());
@@ -51,19 +52,15 @@ public class UserManager {
         return user;
     }
 
-    public void addUserToArray(User user, User[] users) {
-        for (int i = 0; i < users.length; i++) {
-            if(users[i] == null){
-                users[i] = user;
-                break;
-            }
-        }
+    public void addUserToArray(User user, List<User> listUsers) {
+        listUsers.add(user);
+        
     }
 
-    public void printListUsers(User[] users) {
-        for (int i = 0; i < users.length; i++) {
-            if(users[i] != null){
-                System.out.println(i+1+". " + users[i].toString());
+    public void printListUsers(List<User> listUsers) {
+        for (int i = 0; i < listUsers.size(); i++) {
+            if(listUsers.get(i) != null){
+                System.out.println(i+1+". " + listUsers.get(i).toString());
             }
         }   
     }

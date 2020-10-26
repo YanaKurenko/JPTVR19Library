@@ -22,7 +22,7 @@ public class LibraryManager {
     private ReaderManager readerManager = new ReaderManager();
     private BookManager bookManager = new BookManager();
 
-    public History takeOnBook(List<Book> listBooks, Reader[] readers) {
+    public History takeOnBook(List<Book> listBooks, List<Reader> ListReaders) {
         History history = new History();
         // Вывести список читателей
         // Попросить пользователя выбрать номер читателя
@@ -30,11 +30,11 @@ public class LibraryManager {
         // Тоже самое проделать для читателя.
         // Инициировать history и отдать его return
         System.out.println("--- Список читателей ---");
-        readerManager.printListReaders(listReaders);
+        readerManager.printListReaders(ListReaders);
         System.out.print("Выберите номер читателя: ");
         int readerNumber = scanner.nextInt();
         scanner.nextLine();
-        Reader reader = readers[readerNumber-1];
+        Reader reader = ListReaders.get(readerNumber-1);
         history.setReader(reader);
         bookManager.printListBooks(listBooks);
         System.out.print("Выберите номер книги: ");
@@ -48,15 +48,15 @@ public class LibraryManager {
         return history;
     }
 
-    public void returnBook(History[] histories) {
+    public void returnBook(List<History> listHistories) {
         System.out.println("--- Список выданных книг ---");
-        for (int i = 0; i < histories.length; i++) {
-            if(histories[i] != null && histories[i].getReturnDate() == null){
+        for (int i = 0; i < listHistories.size(); i++) {
+            if(listHistories.get(i) != null && listHistories.get(i).getReturnDate() == null){
                 System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
                         ,i+1
-                        ,histories[i].getBook().getName()
-                        ,histories[i].getReader().getFirstname()
-                        ,histories[i].getReader().getLastname()
+                        ,listHistories.get(i).getBook().getName()
+                        ,listHistories.get(i).getReader().getFirstname()
+                        ,listHistories.get(i).getReader().getLastname()
                 );
             }
         }
@@ -64,15 +64,12 @@ public class LibraryManager {
         int historyNumber = scanner.nextInt();
         scanner.nextLine();
         Calendar calendar = new GregorianCalendar();
-        histories[historyNumber-1].setReturnDate(calendar.getTime());
+        listHistories.get(historyNumber-1).setReturnDate(calendar.getTime());
     }
 
-    public void addHistoryToArray(History history, History[] histories) {
-        for (int i = 0; i < histories.length; i++) {
-            if (histories[i] == null) {
-                histories[i] = history;
-                break;
-            }
+    public void addHistoryToArray(History history, List<History> listHistories) {
+        for (int i = 0; i < listHistories.size(); i++) {
+           listHistories.add(history);
         }
     }
 
@@ -84,14 +81,14 @@ public class LibraryManager {
         );
     }
 
-    public void printListReadBooks(History[] histories) {
-        for (int i = 0; i < histories.length; i++) {
-            if(histories[i] != null && histories[i].getReturnDate()==null){
+    public void printListReadBooks(List<History> listHistories) {
+        for (int i = 0; i < listHistories.size(); i++) {
+            if(listHistories.get(i) != null && listHistories.get(i).getReturnDate()==null){
                 System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
                         ,i+1
-                        ,histories[i].getBook().getName()
-                        ,histories[i].getReader().getFirstname()
-                        ,histories[i].getReader().getLastname()
+                        ,listHistories.get(i).getBook().getName()
+                        ,listHistories.get(i).getReader().getFirstname()
+                        ,listHistories.get(i).getReader().getLastname()
                 );
             }
         }

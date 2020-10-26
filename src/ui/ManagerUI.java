@@ -16,10 +16,7 @@ import tools.creators.BookManager;
 import tools.creators.LibraryManager;
 import tools.creators.ReaderManager;
 import tools.creators.UserManager;
-import tools.savers.BookSaver;
-import tools.savers.HistorySaver;
-import tools.savers.ReaderSaver;
-import tools.savers.UserSaver;
+import tools.savers.SaverToFile;
 
 /**
  *
@@ -29,12 +26,9 @@ public class ManagerUI {
     private BookManager bookManager = new BookManager();
     private ReaderManager readerManager = new ReaderManager();
     private LibraryManager libraryManager = new LibraryManager();
-    private BookSaver bookSaver = new BookSaver();
-    private ReaderSaver readerSaver = new ReaderSaver();
-    private HistorySaver historySaver = new HistorySaver();
+    private SaverToFile saverToFile = new SaverToFile();
     private SecureManager secureManager = new SecureManager();
-    private UserSaver userSaver = new UserSaver();
-    public void getManagerUI(List<Reader> listReaders, User[] users, List<Book> listBooks, History[] histories){
+    public void getManagerUI(List<Reader> ListReaders, List<User> listUsers, List<Book> ListBooks, List<History> listHistories){
         boolean repeat = true;
         do{
             System.out.println("Задачи: ");
@@ -57,39 +51,38 @@ public class ManagerUI {
                 case "1":
                     System.out.println("--- Добавить новую книгу ---");
                     Book book = bookManager.createBook();
-                    bookManager.addBookToArray(book,listBooks);
-                    bookSaver.saveBooks(listBooks);
+                    bookManager.addBookToArray(book,ListBooks);
+                    saverToFile.save(ListBooks,"books");
                     break;
                 case "2":
                     System.out.println("--- Список книг ---");
-                    bookManager.printListBooks(listBooks);
+                    bookManager.printListBooks(ListBooks);
                     break;
                 case "3":
                     System.out.println("--- Зарегистрировать читателя ---");
                     Reader reader = readerManager.createReader();
-                    readerManager.addReaderToArray(List<Reader>,listReaders);
-                    readerSaver.saveReaders(listReaders);
+                    readerManager.addReaderToArray(reader,ListReaders);
+                    saverToFile.save(ListReaders, "readers");
                     break;
                 case "4":
                     System.out.println("--- Список читателей ---");
-                    readerManager.printListReaders(listReaders);
+                    readerManager.printListReaders(ListReaders);
                     break;
                 case "5":
                     System.out.println("--- Выдать книгу читателю ---");
-                    History history = libraryManager.takeOnBook(listBooks, readers);
-                    libraryManager.addHistoryToArray(history,histories);
-                    historySaver.saveHistories(histories);
+                    History history = libraryManager.takeOnBook(ListBooks, ListReaders);
+                    libraryManager.addHistoryToArray(history,listHistories);
+                    saverToFile.save(listHistories, "histories");
                     break;
                 case "6":
                     System.out.println("--- Вернуть книгу в библиотеку ---");
                     libraryManager = new LibraryManager();
-                    libraryManager.returnBook(histories);
-                    historySaver = new HistorySaver();
-                    historySaver.saveHistories(histories);
+                    libraryManager.returnBook(listHistories);
+                    saverToFile.save(listHistories, "histories");
                     break;
                 case "7":
                     System.out.println("--- Список выданных книг ---");
-                    libraryManager.printListReadBooks(histories);
+                    libraryManager.printListReadBooks(listHistories);
                     break;
                 default:
                     System.out.println("Нет такой задачи.");
