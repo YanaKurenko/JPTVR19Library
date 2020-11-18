@@ -8,6 +8,7 @@ package tools.creators;
 import entity.Book;
 import entity.Reader;
 import entity.User;
+import entity.dbcontrollers.ReaderFacade;
 import java.util.List;
 import java.util.Scanner;
 import security.SecureManager;
@@ -18,10 +19,12 @@ import security.SecureManager;
  */
 public class UserManager {
         private Scanner scanner = new Scanner(System.in);
+        private ReaderFacade readerFacade = new ReaderFacade(Reader.class);
 
     public User createUser() {
         ReaderManager readerManager = new ReaderManager();
         Reader reader = readerManager.createReader();
+        readerFacade.create(reader);
         User user = new User();
         System.out.println("--- Создание пользователя ---");
         System.out.print("Введите логин: ");
@@ -29,8 +32,8 @@ public class UserManager {
         System.out.print("Введите пароль: ");
         user.setPassword(scanner.nextLine());
         int numRole;
-        do {
-            System.out.println("Список ролей ");
+        do{
+            System.out.print("Список ролей: ");
             for (int i = 0; i < SecureManager.role.values().length; i++) {
                 System.out.printf("%d. %s%n"
                         ,i+1
@@ -39,22 +42,23 @@ public class UserManager {
             }
             System.out.println("Укажите номер роли: ");
             String numRoleStr = scanner.nextLine();
-            try{
+            try {
                 numRole = Integer.parseInt(numRoleStr);
                 break;
-            }catch (Exception e) {
-                System.out.println("Вводите указанные цифры! ");
+            } catch (Exception e) {
+                System.out.println("Вводите указанные цифры!");
             }
         }while(true);
+        
         user.setRole(SecureManager.role.values()[numRole - 1].toString());
         user.setReader(reader);
+        
         System.out.println("Пользователь создан: "+user.toString());
         return user;
     }
 
     public void addUserToArray(User user, List<User> listUsers) {
         listUsers.add(user);
-        
     }
 
     public void printListUsers(List<User> listUsers) {

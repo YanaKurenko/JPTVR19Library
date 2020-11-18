@@ -6,6 +6,7 @@
 package tools.creators;
 
 import entity.Reader;
+import entity.dbcontrollers.ReaderFacade;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ import java.util.Scanner;
  */
 public class ReaderManager {
     private Scanner scanner = new Scanner(System.in);
+    private ReaderFacade readerFacade = new ReaderFacade(Reader.class);
     public Reader createReader() {
         Reader reader = new Reader();
         System.out.println("--- Регистрация нового пользователя ---");
@@ -40,10 +42,11 @@ public class ReaderManager {
         );
     }
 
-    public void printListReaders(List<Reader> listReaders) {
+    public void printListReaders() {
+        List<Reader> listReaders = readerFacade.findAll();
         for (int i = 0; i < listReaders.size(); i++) {
             if(listReaders.get(i) != null){
-                System.out.println(i+1+". " + listReaders.get(i).toString());
+                System.out.println(listReaders.get(i).getId()+". " + listReaders.get(i).toString());
             }
         }
     }

@@ -8,10 +8,15 @@ package tools.creators;
 import entity.Book;
 import entity.History;
 import entity.Reader;
+import entity.User;
+import entity.dbcontrollers.BookFacade;
+import entity.dbcontrollers.HistoryFacade;
+import entity.dbcontrollers.ReaderFacade;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
+import jptvr19library.App;
 
 /**
  *
@@ -21,26 +26,36 @@ public class LibraryManager {
     private Scanner scanner = new Scanner(System.in);
     private ReaderManager readerManager = new ReaderManager();
     private BookManager bookManager = new BookManager();
+    private ReaderFacade readerFacade = new ReaderFacade(Reader.class);
+    private BookFacade bookFacade = new BookFacade(Book.class);
+    private HistoryFacade historyFacade = new HistoryFacade(History.class);
 
-    public History takeOnBook(List<Book> listBooks, List<Reader> ListReaders) {
+    public History takeOnBook() {
         History history = new History();
         // Вывести список читателей
         // Попросить пользователя выбрать номер читателя
         // По номеру читателя взять конкретного читателя из массива
         // Тоже самое проделать для читателя.
         // Инициировать history и отдать его return
-        System.out.println("--- Список читателей ---");
-        readerManager.printListReaders(ListReaders);
-        System.out.print("Выберите номер читателя: ");
-        int readerNumber = scanner.nextInt();
-        scanner.nextLine();
-        Reader reader = ListReaders.get(readerNumber-1);
+        User loggedInUser = App.loginedUser;
+        Reader reader = null;
+        
+        if("READER".equals(loggedInUser.getRole())){
+            reader = loggedInUser.getReader();
+        }else if("MANAGER".equals(loggedInUser.getRole())){
+            System.out.println("--- Список читателей ---");
+            readerManager.printListReaders();
+            System.out.print("Выберите номер читателя: ");
+            Long readerNumber = scanner.nextLong();
+            scanner.nextLine();
+            reader = readerFacade.find(readerNumber);
+        }
         history.setReader(reader);
-        bookManager.printListBooks(listBooks);
+        bookManager.printListBooks();
         System.out.print("Выберите номер книги: ");
-        int bookNumber = scanner.nextInt();
+        Long bookNumber = scanner.nextLong();
         scanner.nextLine();
-        Book book = listBooks.get(bookNumber-1);
+        Book book = bookFacade.find(bookNumber);
         history.setBook(book);
         Calendar calendar = new GregorianCalendar();
         history.setGiveOutDate(calendar.getTime());
@@ -48,29 +63,39 @@ public class LibraryManager {
         return history;
     }
 
-    public void returnBook(List<History> listHistories) {
+    public void returnBook() {
         System.out.println("--- Список выданных книг ---");
+        List<History> listHistories = historyFacade.findReadAll(App.loginedUser.getReader(), Boolean.TRUE);
         for (int i = 0; i < listHistories.size(); i++) {
-            if(listHistories.get(i) != null && listHistories.get(i).getReturnDate() == null){
-                System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
-                        ,i+1
-                        ,listHistories.get(i).getBook().getName()
-                        ,listHistories.get(i).getReader().getFirstname()
-                        ,listHistories.get(i).getReader().getLastname()
-                );
+            if("MANAGER".equals(App.loginedUser.getRole())){
+                if(listHistories.get(i) != null && listHistories.get(i).getReturnDate() == null){
+                    System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
+                            ,listHistories.get(i).getId()
+                            ,listHistories.get(i).getBook().getName()
+                            ,listHistories.get(i).getReader().getFirstname()
+                            ,listHistories.get(i).getReader().getLastname()
+                    );
+                }
+            }else if("READER".equals(App.loginedUser.getRole())){
+                if(listHistories.get(i) != null 
+                        && listHistories.get(i).getReader().equals(App.loginedUser.getReader())
+                        && listHistories.get(i).getReturnDate() == null){
+                    System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
+                            ,listHistories.get(i).getId()
+                            ,listHistories.get(i).getBook().getName()
+                            ,listHistories.get(i).getReader().getFirstname()
+                            ,listHistories.get(i).getReader().getLastname()
+                    );
+                }
             }
         }
         System.out.print("Выберите номер возвращаемой книги: ");
-        int historyNumber = scanner.nextInt();
+        Long historyNumber = scanner.nextLong();
         scanner.nextLine();
         Calendar calendar = new GregorianCalendar();
-        listHistories.get(historyNumber-1).setReturnDate(calendar.getTime());
-    }
-
-    public void addHistoryToArray(History history, List<History> listHistories) {
-        for (int i = 0; i < listHistories.size(); i++) {
-           listHistories.add(history);
-        }
+        History history = historyFacade.find(historyNumber);
+        history.setReturnDate(calendar.getTime());
+        historyFacade.edit(history);
     }
 
     private void printHistory(History history) {
@@ -81,11 +106,12 @@ public class LibraryManager {
         );
     }
 
-    public void printListReadBooks(List<History> listHistories) {
+    public void printListReadBooks() {
+        List<History> listHistories = historyFacade.findReadAll(App.loginedUser.getReader(),true);
         for (int i = 0; i < listHistories.size(); i++) {
             if(listHistories.get(i) != null && listHistories.get(i).getReturnDate()==null){
                 System.out.printf("%d. Книгу \"%s\" читает %s %s%n" 
-                        ,i+1
+                        ,listHistories.get(i).getId()
                         ,listHistories.get(i).getBook().getName()
                         ,listHistories.get(i).getReader().getFirstname()
                         ,listHistories.get(i).getReader().getLastname()
