@@ -23,50 +23,40 @@ import javax.persistence.Persistence;
  *
  * @author pupil
  */
-public class SaverToFile {
-    public void save(List arrayList,String fileName) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPTVR19LibraryDev25PU");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        for (int i = 0; i < arrayList.size(); i++) {
-            if("Reader".equals(arrayList.get(i).getClass().toString())){
-                List<Reader> listReader = (List<Reader>) arrayList;
-                if(listReader.get(i).getId()==null){
-                 em.persist(listReader.get(i));
-                }
-            }
+public class SaverToFile implements SaveInterface{
+    @Override
+    public void save(List arrayList, String fileName){
+
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
+        try {
+            fos = new FileOutputStream(fileName);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(arrayList);
+            oos.flush();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Не найден файл");
+        } catch (IOException ex) {
+            System.out.println("Ошибка ввода/вывода");
         }
-        tx.commit();
-//                FileOutputStream fos = null;
-//        ObjectOutputStream oos = null;
-//        try {
-//            fos = new FileOutputStream("readers");
-//            oos = new ObjectOutputStream(fos);
-//            oos.writeObject(arrayList);
-//            oos.flush();
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("Не найден файл");
-//        } catch (IOException ex) {
-//            System.out.println("Ошибка ввода/вывода");
-//        }
+
     }
-    public List load(String fileName) {
-//        List arrayList = new ArrayList();
-//        List<Reader> listReaders = new ArrayList<>();
-//        FileInputStream fis = null;
-//        ObjectInputStream ois = null;
-//        try {
-//            fis = new FileInputStream(fileName);
-//            ois = new ObjectInputStream(fis);
-//            arrayList = (List) ois.readObject();
-//        } catch (FileNotFoundException ex) {
-//            System.out.println("Не найден файл");
-//        } catch (IOException ex) {
-//            System.out.println("Ошибка ввода/вывода");
-//        } catch (ClassNotFoundException ex) {
-//            System.out.println("Не найден класс");
-//        }
-//        return arrayList;
-    }
+    @Override
+    public List load(String fileName){
+        List arrayList = new ArrayList();
+        FileInputStream fis = null;
+        ObjectInputStream ois = null;
+        try {
+            fis = new FileInputStream(fileName);
+            ois = new ObjectInputStream(fis);
+            arrayList = (List) ois.readObject();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Не найден файл");
+        } catch (IOException ex) {
+            System.out.println("Ошибка ввода/вывода");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Не найден класс");
+        }
+        return arrayList;
+    } 
 }

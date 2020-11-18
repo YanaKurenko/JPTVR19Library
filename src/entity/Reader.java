@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
- @Entity 
+ @Entity
 public class Reader implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Reader implements Serializable{
     public String getLastname() {
         return lastname;
     }
-    
+
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
