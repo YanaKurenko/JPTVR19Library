@@ -3,25 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.DBControllers;
+package entity.facade;
 
 import entity.History;
 import entity.Reader;
+import factory.ConnectSingleton;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
  * @author user
  */
 public class HistoryFacade extends AbstractFacade<History>{
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPTVR19LibraryDev25PU");
-    private EntityManager em = emf.createEntityManager();
 
-    public HistoryFacade(Class<History> entityClass) {
-        super(entityClass);
+    private EntityManager em;
+
+    public HistoryFacade() {
+        super(History.class);
+        ConnectSingleton connect = ConnectSingleton.getInstance();
+        em = connect.getEntityManager();
     }
 
     @Override

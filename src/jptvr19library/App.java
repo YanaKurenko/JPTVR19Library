@@ -7,17 +7,12 @@ package jptvr19library;
 
 import entity.User;
 import security.SecureManager;
-import tools.savers.SaveInterface;
-import tools.savers.SaverToBase;
 import ui.ManagerUI;
 import ui.ReaderUI;
 
 public class App {
    
     private SecureManager secureManager = new SecureManager();
-  //  private SaveInterface saver = new SaverToFile();
-    private SaveInterface saver = new SaverToBase();
-    
     public static User loginedUser;
     
     public App() {

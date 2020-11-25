@@ -3,23 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity.DBControllers;
+package entity.facade;
 
 import entity.Reader;
+import factory.ConnectSingleton;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
  * @author user
  */
 public class ReaderFacade extends AbstractFacade<Reader>{
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPTVR19LibraryDev25PU");
-    private EntityManager em = emf.createEntityManager();
+   
+    private EntityManager em;
 
-    public ReaderFacade(Class<Reader> entityClass) {
-        super(entityClass);
+    public ReaderFacade() {
+        super(Reader.class);
+        ConnectSingleton connect = ConnectSingleton.getInstance();
+        em = connect.getEntityManager();
     }
 
     @Override
@@ -28,3 +29,4 @@ public class ReaderFacade extends AbstractFacade<Reader>{
     }
    
 }
+

@@ -5,6 +5,8 @@
  */
 package jptvr19library;
 
+import factory.ConnectSingleton;
+
 /**
  *
  * @author Melnikov
@@ -16,7 +18,17 @@ public class JPTVR19Library {
      */
     public static void main(String[] args) {
         App app = new App();
-        app.run();
+        try {
+            app.run();
+        } finally {
+            ConnectSingleton connect = ConnectSingleton.getInstance();
+            if (connect.getEntityManager() != null) {
+                connect.getEntityManager().close();
+            }
+            if (connect.getEntityManagerFactory() != null) {
+                connect.getEntityManagerFactory().close();
+            }
+        }
     }
     
 }

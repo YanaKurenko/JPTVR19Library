@@ -13,7 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 
- @Entity
+@Entity
 public class Reader implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

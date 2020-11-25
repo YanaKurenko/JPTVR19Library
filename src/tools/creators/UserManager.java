@@ -5,10 +5,11 @@
  */
 package tools.creators;
 
-import entity.DBControllers.ReaderFacade;
-import entity.DBControllers.UserFacade;
+import entity.facade.ReaderFacade;
+import entity.facade.UserFacade;
 import entity.Reader;
 import entity.User;
+import factory.FactoryFacade;
 import java.util.List;
 import java.util.Scanner;
 import security.SecureManager;
@@ -18,14 +19,13 @@ import security.SecureManager;
  * @author Melnikov
  */
 public class UserManager {
-        private ReaderFacade readerFacade = new ReaderFacade(Reader.class);
-        private UserFacade userFacade = new UserFacade(User.class);
+        private ReaderFacade readerFacade = FactoryFacade.getReaderFacade();
+        private UserFacade userFacade = FactoryFacade.getUserFacade();
         private Scanner scanner = new Scanner(System.in);
 
     public User createUser() {
         ReaderManager readerManager = new ReaderManager();
         Reader reader = readerManager.createReader();
-        readerFacade.create(reader);
         User user = new User();
         System.out.println("--- Создание пользователя ---");
         System.out.print("Введите логин: ");
